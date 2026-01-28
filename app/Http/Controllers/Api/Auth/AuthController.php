@@ -48,4 +48,47 @@ class AuthController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
+    //Login
+    public function login(Request $request)
+    {
+        //Validate Data
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        // if Validation fail
+        if($validator->fails()) {
+            return $this->errorResponse('Validation Error', $validator->errors(), 422);
+        }
+
+        try{
+            // take user where email
+            $user = User::where('email', $request->email)->first();
+
+            //check user and user's password
+            if(!$user || !Hash::check($request->password, $user->password)) {
+                return $this->errorResponse('Invalid credentials', 401);
+            }
+
+            // get token
+            $token = $user->createToken('api-token')->plainTextToken;
+
+            return $this->successResponse('Login Successfully', [
+                'user' => $user,
+                'token' => $token,
+            ]);
+        } catch(\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    //LogOut
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return $this->successResponse('Logout Successfully');
+    }
 }
