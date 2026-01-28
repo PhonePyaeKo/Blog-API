@@ -94,4 +94,17 @@ class PostController extends Controller
 
         return $this->successResponse('Post Update Successfully', new PostResource($post->load('user')), 200);
     }
+
+    //Delete
+    public function destroy(Post $post)
+    {
+        //if no post
+        if(!$post) {
+            return $this->errorResponse('Post not found!', 404);
+        }
+
+        $post->delete();
+
+        return $this->successResponse('Post Deleted');
+    }
 }
