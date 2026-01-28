@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dom\Comment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,4 +16,16 @@ class Post extends Model
         'content',
         'user_id',
     ];
+
+    //User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    //Comment
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
