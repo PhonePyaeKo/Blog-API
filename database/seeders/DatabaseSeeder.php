@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,8 +21,24 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'KoKo',
+            'email' => 'koko@gmail.com',
         ]);
+
+        User::factory()->create([
+            'name' => 'MgMg',
+            'email' => 'mgmg@gmail.com',
+        ]);
+
+        User::factory()->create([
+            'name' => 'ZawZaw',
+            'email' => 'zawzaw@gmail.com',
+        ]);
+
+        //Post
+        Post::factory(20)->create();
+
+        //Comment
+        Comment::factory(50)->create();
     }
 }
