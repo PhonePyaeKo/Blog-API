@@ -30,6 +30,7 @@ class PostController extends Controller
             return $this->errorResponse('Post not found!', 404);
         }
 
+        //if post 
         $userPost = $post->load([
             'user', 'comments.user'
         ]);
@@ -42,7 +43,7 @@ class PostController extends Controller
     {
         //Validate Form Data
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
+            'title' => 'required|string|max:255',
             'content' => 'required',
         ]);
 
@@ -66,5 +67,31 @@ class PostController extends Controller
         }
     }
 
+    //Update
+    public function update(Request $request, Post $post)
+    {
+        //if no post
+        if(!$post) {
+            return $this->errorResponse('Post not found!', 404);
+        }
 
+        // if post, validate data
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+        ]);
+
+        //if validator fails
+        if($validator->fails()) {
+            return $this->errorResponse('Validation Error', $validator->errors(), 422);
+        }
+
+        //Update Data
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+
+        return $this->successResponse('Post Update Successfully', new PostResource($post->load('user')), 200);
+    }
 }
