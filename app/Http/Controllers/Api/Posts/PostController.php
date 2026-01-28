@@ -22,6 +22,21 @@ class PostController extends Controller
         return $this->successResponse('Post Index', PostResource::collection($posts));
     }
 
+    //Show
+    public function show(Request $request, Post $post)
+    {
+        //if no post
+        if(!$post) {
+            return $this->errorResponse('Post not found!', 404);
+        }
+
+        $userPost = $post->load([
+            'user', 'comments.user'
+        ]);
+
+        return $this->successResponse('Post Detail', new PostResource($userPost), 200);
+    }
+
     //Store
     public function store(Request $request)
     {
@@ -50,4 +65,6 @@ class PostController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
+
 }
