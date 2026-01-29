@@ -23,14 +23,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('posts', PostController::class);
 
     //Comment Api Route
-    Route::prefix('posts/{post}')->group(function() {
-        //Store 
-        Route::post('/comments', [CommentController::class, 'store']);
-
-        //Update 
-        Route::put('/comments/{comment}', [CommentController::class, 'update']);
-
-        //Delete 
-        Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
-    });
+    Route::apiResource('posts.comments', CommentController::class)->only(['store', 'update', 'destroy']);
 });

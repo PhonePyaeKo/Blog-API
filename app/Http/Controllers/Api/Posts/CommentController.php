@@ -44,7 +44,7 @@ class CommentController extends Controller
     }
 
     //Update
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Post $post, Comment $comment)
     {
         //Unauthorized
         if($comment->user_id !== Auth::id()) {
@@ -74,7 +74,7 @@ class CommentController extends Controller
     }
 
     //Delete
-    public function destroy(Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
         try {
             $comment->load('post');
