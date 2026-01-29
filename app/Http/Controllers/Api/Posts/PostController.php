@@ -103,6 +103,10 @@ class PostController extends Controller
             return $this->errorResponse('Post not found!', 404);
         }
 
+        if($post->user_id !== Auth::id()){
+            return $this->errorResponse('Unauthorized Action', 403);
+        }
+
         $post->delete();
 
         return $this->successResponse('Post Deleted');
