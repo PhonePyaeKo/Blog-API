@@ -72,4 +72,26 @@ class CommentController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
+    //Delete
+    public function destroy(Comment $comment)
+    {
+        try {
+            $comment->load('post');
+
+            if($comment->user_id == Auth::id() || 
+                $comment->post->user_id == Auth::id()) {
+
+                //Delete comment
+                $comment->delete();
+
+                return $this->successResponse('Comment Delete Successfully');
+                
+            } else {
+                return $this->errorResponse('Unauthorized Action', 403);
+            }
+        } catch (\Exception $e){
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
 }
