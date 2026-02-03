@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,19 @@ class DatabaseSeeder extends Seeder
             'name' => 'ZawZaw',
             'email' => 'zawzaw@gmail.com',
         ]);
+
+        //Role
+        //AdminRole
+        Role::updateOrCreate(
+            ['slug' => 'admin'],
+            ['name' => 'Admin']
+        );
+
+        //User Role
+        Role::updateOrCreate(
+            ['slug' => 'user'],
+            ['name' => 'User']
+        );
 
         //Post
         Post::factory(20)->create();
