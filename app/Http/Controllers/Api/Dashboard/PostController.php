@@ -7,6 +7,7 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -20,20 +21,47 @@ class PostController extends Controller
         return $this->successResponse('Post Index', PostResource::collection($posts));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        //Create Post
+
+        //validate Data
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        //if validator fails
+        if($validator->fails()) {
+            return $this->errorResponse('Validation Fail', $validator->errors(), 422);
+        }
+
+        try{
+
+            $post = Post::create([
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+
+            return $this->successResponse('Post Create Successfully', new PostResource($post->load('user')), 201);
+
+        } catch(\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    //Post Detail
+    public function show(Post $post)
     {
-        //
+        if(!$post) {
+            return $this->errorResponse('Post not found!', 404);
+        }
+
+        $post->load([
+            'user', 'comments.user'
+        ]);
+
+        return $this->successResponse('Post Detail', new PostResource($post));
     }
 
     /**
