@@ -64,12 +64,31 @@ class PostController extends Controller
         return $this->successResponse('Post Detail', new PostResource($post));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    //Update Post
+    public function update(Request $request, Post $post)
     {
-        //
+        //validate data
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return $this->errorResponse('Validation Error', $validator->errors(), 422);
+        }
+
+        try {
+            //Update Post
+            $post->update([
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+
+            return $this->successResponse('Post Updated Successfully', new PostResource($post->load('user')), 200);
+
+        } catch(\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
     /**
