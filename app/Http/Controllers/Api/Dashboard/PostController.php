@@ -91,11 +91,16 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    //Delete Post
+    public function destroy(Post $post)
     {
-        //
+        //if no post
+        if(!$post) {
+            return $this->errorResponse('Post not found!', 404);
+        }
+
+        $post->delete();
+
+        return $this->successResponse('Post Deleted');
     }
 }
