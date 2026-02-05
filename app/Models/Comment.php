@@ -14,6 +14,7 @@ class Comment extends Model
         'comment',
         'user_id',
         'post_id',
+        'is_banned',
     ];
 
     //User
