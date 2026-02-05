@@ -17,7 +17,7 @@ class CommentController extends Controller
     //Index
     public function index()
     {
-        $comments = Comment::with('post')->latest()->paginate(20);
+        $comments = Comment::with(['user','post'])->latest()->paginate(20);
 
         return $this->successResponse('Comments Index', CommentResource::collection($comments));
     }
