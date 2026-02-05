@@ -14,58 +14,28 @@ use Illuminate\Support\Facades\Validator;
 class CommentController extends Controller
 {
     use ApiResponse;
-
-    //Create comment
-    public function store(Request $request, Post $post)
+    //Index
+    public function index()
     {
-        $validator = Validator::make($request->all(), [
-            'comment' => 'required',
-        ]);
+        $comments = Comment::with('post')->latest()->paginate(20);
 
-        //if validator fails
-        if($validator->fails()) {
-
-            return $this->errorResponse('Validation Error', $validator->errors(), 422);
-
-        }
-
-        try {
-            //create comment belongsTo Post
-            $comment = $post->comments()->create([
-                'comment' => $request->comment,
-                'user_id' => Auth::id(),
-            ]);
-
-            return $this->successResponse('Comment Created Successfully', new CommentResource($comment->load('user')), 201);
-
-        } catch(\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
-        }
+        return $this->successResponse('Comments Index', CommentResource::collection($comments));
     }
 
-    //Update
-    public function update(Request $request, Comment $comment)
+    //Show
+    public function show(Comment $comment)
     {
-        //validate data
-        $validator = Validator::make($request->all(), [
-            'comment' => 'required',
+        //if no comment
+        if(!$comment) {
+            return $this->errorResponse('Comment not found!', 404);
+        }
+
+        //if comment 
+        $comment->load([
+            'post', 'post.user'
         ]);
 
-        if($validator->fails()) {
-            return $this->errorResponse('Validation Error', $validator->errors(), 422);
-        }
-
-        try {
-            //Update comment
-            $comment->update([
-                'comment' => $request->comment,
-            ]);
-
-            return $this->successResponse('Comment Update Successfully', new CommentResource($comment->load('user')));
-
-        } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage(), 500);
-        }
+        return $this->successResponse('Comment Detail', new CommentResource($comment), 200);
     }
 
     //Ban Comment
@@ -110,7 +80,7 @@ class CommentController extends Controller
             $comment->delete();
 
             return $this->successResponse('Comment Delete Successfully');
-            
+
         } catch (\Exception $e){
             return $this->errorResponse($e->getMessage(), 500);
         }

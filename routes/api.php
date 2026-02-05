@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Dashboard\CommentController as DashboardCommentController;
+use App\Http\Controllers\Api\Dashboard\PostController as DashboardPostController;
 use App\Http\Controllers\Api\Posts\CommentController;
 use App\Http\Controllers\Api\Posts\PostController;
 use Illuminate\Http\Request;
@@ -24,4 +26,20 @@ Route::middleware('auth:sanctum')->group(function() {
 
     //Comment Api Route
     Route::apiResource('posts.comments', CommentController::class)->only(['store', 'update', 'destroy']);
+});
+
+
+//dashboard
+Route::middleware('auth:sanctum')->prefix('dashboard')->group(function() {
+    //PostController
+    Route::apiResource('posts', DashboardPostController::class);
+
+    //Comment(create, update, destroy)
+    Route::apiResource('comments', DashboardCommentController::class)->only([
+        'index', 'show', 'destroy'
+    ]);
+
+    //comment Ban Unban
+    Route::apiResource('comments/{comment}/ban', [DashboardCommentController::class, 'ban']);
+    Route::apiResource('comments/{comment}/unban', [DashboardCommentController::class, 'unban']);
 });
