@@ -7,6 +7,7 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -41,6 +42,7 @@ class PostController extends Controller
             $post = Post::create([
                 'title' => $request->title,
                 'content' => $request->content,
+                'user_id' => Auth::id(),
             ]);
 
             return $this->successResponse('Post Create Successfully', new PostResource($post->load('user')), 201);
