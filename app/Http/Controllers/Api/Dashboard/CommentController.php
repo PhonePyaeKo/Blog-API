@@ -32,7 +32,7 @@ class CommentController extends Controller
 
         //if comment 
         $comment->load([
-            'post', 'post.user'
+            'post', 'post.user', 'user'
         ]);
 
         return $this->successResponse('Comment Detail', new CommentResource($comment), 200);
