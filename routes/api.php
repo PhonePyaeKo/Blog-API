@@ -40,6 +40,6 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function() {
     ]);
 
     //comment Ban Unban
-    Route::apiResource('comments/{comment}/ban', [DashboardCommentController::class, 'ban']);
-    Route::apiResource('comments/{comment}/unban', [DashboardCommentController::class, 'unban']);
+    Route::put('comments/{comment}/ban', [DashboardCommentController::class, 'ban']);
+    Route::put('comments/{comment}/unban', [DashboardCommentController::class, 'unban']);
 });
