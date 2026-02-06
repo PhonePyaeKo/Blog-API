@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 //dashboard
-Route::middleware('auth:sanctum')->prefix('dashboard')->group(function() {
+Route::middleware(['auth:sanctum', 'can:access-dashboard'])->prefix('dashboard')->group(function() {
     //PostController
     Route::apiResource('posts', DashboardPostController::class);
 
