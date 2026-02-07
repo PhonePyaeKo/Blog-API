@@ -50,4 +50,20 @@ class UserController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
+    //Demote
+    public function demote(User $user)
+    {
+        try {
+
+            $user->update([
+                'role_id' => 2
+            ]);
+
+            return $this->successResponse('User Demoted', new UserResource($user->load('role')));
+
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
 }
