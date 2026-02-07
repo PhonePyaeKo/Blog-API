@@ -15,8 +15,22 @@ class UserController extends Controller
     //User Index
     public function index()
     {
-        $users = User::with(['posts', 'comments'])->latest()->paginate(10);
+        $users = User::with(['posts', 'comments', 'role'])->latest()->paginate(10);
 
         return $this->successResponse('Users Index', UserResource::collection($users));
+    }
+
+    //Detail
+    public function show(User $user)
+    {
+        if(!$user) {
+            return $this->errorResponse('User Not found!', 404);
+        }
+
+        $user->load([
+            'role', 'posts', 'comments'
+        ]);
+
+        return $this->successResponse('User Detail', new UserResource($user));
     }
 }
