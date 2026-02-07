@@ -7,6 +7,7 @@ use App\Http\Helpers\ApiResponse;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -32,5 +33,21 @@ class UserController extends Controller
         ]);
 
         return $this->successResponse('User Detail', new UserResource($user));
+    }
+
+    //Promote
+    public function promote(User $user)
+    {
+        try {
+
+            $user->update([
+                'role_id' => 1
+            ]);
+
+            return $this->successResponse('User Promoted', new UserResource($user->load('role')));
+
+        } catch (\Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 }

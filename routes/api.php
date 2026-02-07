@@ -46,4 +46,8 @@ Route::middleware(['auth:sanctum', 'can:access-dashboard'])->prefix('dashboard')
 
     //User
     Route::apiResource('users', UserController::class);
+
+     //User Promote Demote
+    Route::put('users/{user}/promote', [UserController::class, 'promote']);
+    Route::put('users/{user}/demote', [UserController::class, 'demote']);
 });
