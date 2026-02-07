@@ -66,4 +66,20 @@ class UserController extends Controller
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
+
+    //Delete
+    public function destroy(User $user)
+    {
+        try {
+            $user->load(['posts', 'comments']);
+
+            //Delete user
+            $user->delete();
+
+            return $this->successResponse('User Delete Successfully');
+
+        } catch (\Exception $e){
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
 }
