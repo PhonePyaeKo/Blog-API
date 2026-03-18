@@ -22,6 +22,7 @@ class AuthController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+            'role_id' => 'nullable|exists:roles,id',
         ]);
 
         // if Validation fails
@@ -35,6 +36,7 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role_id' => $request->role_id ?? 2,
             ]);
 
             // Create Token

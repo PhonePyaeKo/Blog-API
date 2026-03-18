@@ -41,13 +41,13 @@ Route::middleware(['auth:sanctum', 'can:access-dashboard'])->prefix('dashboard')
     ]);
 
     //comment Ban Unban
-    Route::put('comments/{comment}/ban', [DashboardCommentController::class, 'ban']);
-    Route::put('comments/{comment}/unban', [DashboardCommentController::class, 'unban']);
+    Route::patch('comments/{comment}/ban', [DashboardCommentController::class, 'ban']);
+    Route::patch('comments/{comment}/unban', [DashboardCommentController::class, 'unban']);
 
     //User
     Route::apiResource('users', UserController::class);
 
      //User Promote Demote
-    Route::put('users/{user}/promote', [UserController::class, 'promote']);
-    Route::put('users/{user}/demote', [UserController::class, 'demote']);
+    Route::patch('users/{user}/promote', [UserController::class, 'promote']);
+    Route::patch('users/{user}/demote', [UserController::class, 'demote']);
 });
